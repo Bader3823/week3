@@ -1,46 +1,47 @@
-name: Self-Hosted CI/CD
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main" ] 
-
-# This silences the Node.js 20 warnings
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    branches: [ "main" ]
 
 jobs:
-  build-and-push:
+  test:
     runs-on: self-hosted
-    permissions:
-      contents: read
-      packages: write
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # FIX 1: This initializes the build engine on your local machine
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Validate Docker Compose
+        run: docker compose config # Checks for syntax errors in your YAML
 
-      - name: Log in to GitHub Container Registry
+      - name: Test Infrastructure
+        run: |
+          docker compose up -d
+          sleep 15
+          docker compose ps # Checks if all containers are 'running'
+
+  build-and-push:
+    needs: test # Only runs if 'test' job finishes successfully
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # FIX 2: Updated to v6 for Node 24 support
-      - name: Build and push Backend
-        uses: docker/build-push-action@v6
+      - name: Build & Push Backend
+        uses: docker/build-push-action@v5
         with:
-          context: ./backend 
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/week3:latest
 
-      - name: Build and push Frontend
-        uses: docker/build-push-action@v6
+      - name: Build & Push Frontend
+        uses: docker/build-push-action@v5
         with:
-          context: ./frontend 
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/week3/templates:latest
