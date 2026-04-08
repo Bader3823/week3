@@ -2,30 +2,46 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   test:
     runs-on: self-hosted
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Cleanup before test
+        run: docker compose down -v || true
 
       - name: Validate Docker Compose
-        run: docker compose config # Checks for syntax errors in your YAML
+        run: docker compose config
 
       - name: Test Infrastructure
         run: |
+          set -e
           docker compose up -d
-          sleep 15
-          docker compose ps # Checks if all containers are 'running'
+          docker compose ps
+          docker compose logs
+
+      - name: Cleanup after test
+        if: always()
+        run: docker compose down -v
 
   build-and-push:
-    needs: test # Only runs if 'test' job finishes successfully
+    needs: test
     runs-on: ubuntu-latest
+
     permissions:
       packages: write
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Log in to GHCR
         uses: docker/login-action@v3
@@ -34,14 +50,22 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      
       - name: Build & Push Backend
         uses: docker/build-push-action@v5
         with:
+          context: .
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/week3:latest
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/week3:latest
+            ghcr.io/${{ github.repository_owner }}/week3:${{ github.sha }}
 
+     
       - name: Build & Push Frontend
         uses: docker/build-push-action@v5
         with:
+          context: ./frontend
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/week3/templates:latest
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/week3/templates:latest
+            ghcr.io/${{ github.repository_owner }}/week3/templates:${{ github.sha }}
