@@ -58,5 +58,5 @@ jobs:
 
           push: true
 
-          tags: ghcr.io/week3/templates:latest
+          tags: ghcr.io/bader3823/week3/templates:latest
  
