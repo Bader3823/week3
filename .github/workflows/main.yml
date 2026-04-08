@@ -46,7 +46,7 @@ jobs:
 
           push: true
 
-          tags: ghcr.io/week3:latest
+          tags: ghcr.io/bader3823/week3:latest
  
       - name: Build and push Frontend
 
