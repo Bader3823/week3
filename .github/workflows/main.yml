@@ -34,7 +34,7 @@ jobs:
 
           username: ${{ github.actor }}
 
-          password: ${{ secrets.Bader2 }}
+          password: ${{ secrets.GITHUB_TOKEN }}
  
       - name: Build and push Backend
 
