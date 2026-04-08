@@ -32,9 +32,9 @@ jobs:
 
           registry: ghcr.io
 
-          username: ${{ github.Bader3823 }}
+          username: ${{ github.actor }}
 
-          password: ${{ secrets.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 }}
+          password: ${{ secrets.Bader2 }}
  
       - name: Build and push Backend
 
