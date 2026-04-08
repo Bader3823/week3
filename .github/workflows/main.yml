@@ -42,7 +42,7 @@ jobs:
 
         with:
 
-          context: ./backend 
+          context: ./
 
           push: true
 
