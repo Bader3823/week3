@@ -73,7 +73,7 @@ jobs:
            docker pull ghcr.io/bader3823/week3:latest && docker pull ghcr.io/bader3823/week3:latest
   
       - name: Stop and remove old containers
-        run: docker compose down || true
+        run: docker-compose down || true
 
       - name: Run new containers
-        run: docker compose up -d
+        run: docker-compose up -d
