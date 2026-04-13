@@ -76,4 +76,6 @@ jobs:
            docker pull ghcr.io/bader3823/week3:latest && docker pull ghcr.io/bader3823/week3:latest
 
       - name: Run new containers
-        run: docker-compose up -d
+        run: |
+           cd /home/cybersecurity/Desktop/week3
+           docker-compose up -d
