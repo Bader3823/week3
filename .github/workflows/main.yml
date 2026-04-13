@@ -75,8 +75,6 @@ jobs:
            docker pull ghcr.io/bader3823/week3:latest && docker pull ghcr.io/bader3823/week3/templates:latest
            docker pull ghcr.io/bader3823/week3:latest && docker pull ghcr.io/bader3823/week3:latest
 
-           OPENROUTER_API_KEY=${{ secrets.OPENROUTER_API_KEY }} docker compose up -d
-
       - name: Run new containers
         run: |
            cd /home/cybersecurity/Desktop/week3
