@@ -78,4 +78,6 @@ jobs:
       - name: Run new containers
         run: |
            cd /home/cybersecurity/Desktop/week3
-           docker-compose up -d
+           
+           docker-compose down -d || True
+           docker-compose up -d  || True
