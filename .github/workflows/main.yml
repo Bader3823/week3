@@ -76,4 +76,5 @@ jobs:
            docker pull ghcr.io/bader3823/week3:latest && docker pull ghcr.io/bader3823/week3:latest
 
       - name: Run new containers
+        working-directory: ./week3
         run: docker-compose up -d
