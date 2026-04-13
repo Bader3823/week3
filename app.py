@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 db_user = os.getenv("POSTGRES_USER", "postgres")
 db_password = os.getenv("POSTGRES_PASSWORD", "postgres")
-db_host = os.getenv("POSTGRES_HOST", "0.0.0.0")
+db_host = os.getenv("POSTGRES_HOST", "db")
 db_port = os.getenv("POSTGRES_PORT", "5432")
 db_name = os.getenv("POSTGRES_DB", "taskdb")
 db_uri = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
