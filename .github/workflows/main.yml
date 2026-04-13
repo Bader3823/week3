@@ -54,7 +54,7 @@ jobs:
 
         with:
 
-          context: ./
+          context: ./templates
 
           push: true
 
