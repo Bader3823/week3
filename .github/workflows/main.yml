@@ -78,6 +78,7 @@ jobs:
       - name: Run new containers
         run: |
            cd /home/cybersecurity/Desktop/week3
+           ./vault_secret.sh
            docker-compose down
            docker system prune -f
            docker-compose up -d
