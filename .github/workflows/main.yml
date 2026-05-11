@@ -82,3 +82,4 @@ jobs:
            docker-compose down
            docker system prune -f
            docker-compose up -d
+           bandit -r docker-compose.yaml
