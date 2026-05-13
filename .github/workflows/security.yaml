@@ -1,0 +1,35 @@
+name: Security & Linting
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  code-security:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+
+      - name: TruffleHog OSS
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.before }}
+          head: ${{ github.sha }}
+
+      - name: Hadolint (Lint Dockerfiles)
+        run: |
+          docker run --rm -i hadolint/hadolint < Dockerfile || echo "Hadolint found issues in root Dockerfile"
+          if [ -f ./templates/Dockerfile ]; then
+            docker run --rm -i hadolint/hadolint < ./templates/Dockerfile || echo "Hadolint found issues in templates Dockerfile"
+          fi
+
+      - name: Bandit Security Scan
+        run: |
+          pip install bandit
+          bandit -r . -f txt -o bandit-report.txt || echo "Bandit found potential security issues"
