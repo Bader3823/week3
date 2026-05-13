@@ -31,5 +31,7 @@ jobs:
 
       - name: Bandit Security Scan
         run: |
+          python3 -m venv venv
+          source venv/bin/activate
           pip install bandit
           bandit -r . -f txt -o bandit-report.txt || echo "Bandit found potential security issues"
