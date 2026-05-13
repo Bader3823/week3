@@ -77,13 +77,20 @@ jobs:
 
       - name: Run new containers
         run: |
-          # Move to your project directory
           cd /home/cybersecurity/Desktop/week3
           
-          # Refresh the environment
+          cp -r ${{ github.workspace }}/* .
+
+          export VAULT_ADDR='http://127.0.0.1:8200'
+          
+          chmod +x ./vault-secret.sh
+          ./vault-secret.sh || echo "تحذير: فشل سكربت Vault، سيتم محاولة الاستمرار..."
+          
           docker-compose down
           docker system prune -f
           docker-compose up -d
           
       - name: Verify Deployment
-        run: docker ps
+        run: |
+          sleep 5
+          docker ps
