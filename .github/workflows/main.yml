@@ -80,10 +80,6 @@ jobs:
           # Move to your project directory
           cd /home/cybersecurity/Desktop/week3
           
-          # Execute your secret script
-          chmod +x ./vault-secret.sh
-          ./vault-secret.sh
-          
           # Refresh the environment
           docker-compose down
           docker system prune -f
